@@ -16,6 +16,34 @@ set -x -e
 
 echo "🚀 魔改版React Native Xcode脚本启动 - 支持多bundle构建"
 
+# 检查必要的环境变量
+echo "🔍 检查环境变量..."
+echo "  PWD: $PWD"
+echo "  CONFIGURATION: $CONFIGURATION"
+echo "  PLATFORM_NAME: $PLATFORM_NAME"
+echo "  CONFIGURATION_BUILD_DIR: $CONFIGURATION_BUILD_DIR"
+echo "  UNLOCALIZED_RESOURCES_FOLDER_PATH: $UNLOCALIZED_RESOURCES_FOLDER_PATH"
+
+# 修复PATH环境变量问题 - 确保能找到node和npm
+export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
+
+# 如果存在nvm，也添加到PATH中
+if [ -d "$HOME/.nvm" ]; then
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+fi
+
+# 如果存在Homebrew，也添加到PATH中
+if [ -d "/opt/homebrew/bin" ]; then
+    export PATH="/opt/homebrew/bin:$PATH"
+fi
+
+echo "🔧 当前PATH: $PATH"
+echo "🔧 当前Node.js版本: $(node --version 2>/dev/null || echo 'Node.js not found')"
+echo "🔧 当前npm版本: $(npm --version 2>/dev/null || echo 'npm not found')"
+echo "🔧 当前npx版本: $(npx --version 2>/dev/null || echo 'npx not found')"
+
 DEST="$CONFIGURATION_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH"
 
 # Enables iOS devices to get the IP address of the machine running Metro
@@ -146,6 +174,19 @@ if [[ -z "$BUNDLE_NAME" ]]; then
   BUNDLE_NAME="main"
 fi
 
+case "$PLATFORM_NAME" in
+  "macosx")
+    BUNDLE_PLATFORM="macos"
+    ;;
+  *)
+    BUNDLE_PLATFORM="ios"
+    ;;
+esac
+
+if [ "${IS_MACCATALYST}" = "YES" ]; then
+  BUNDLE_PLATFORM="ios"
+fi
+
 # 多bundle构建逻辑
 if [[ "$CONFIGURATION" = *Release* ]]; then
   echo "📦 Release模式: 开始构建多bundle..."
@@ -155,13 +196,13 @@ if [[ "$CONFIGURATION" = *Release* ]]; then
   BASIC_BUNDLE_FILE="$CONFIGURATION_BUILD_DIR/basic.jsbundle"
   BASIC_CONFIG_ARG="--config $PROJECT_ROOT/basic.metro.config.js"
   
-  echo "   命令: $NODE_BINARY $NODE_ARGS $CLI_PATH $BUNDLE_COMMAND $BASIC_CONFIG_ARG --entry-file $BASIC_ENTRY --platform ios --dev false --reset-cache --bundle-output $BASIC_BUNDLE_FILE --assets-dest $DEST"
+  echo "   命令: $NODE_BINARY $NODE_ARGS $CLI_PATH $BUNDLE_COMMAND $BASIC_CONFIG_ARG --entry-file $BASIC_ENTRY --platform $BUNDLE_PLATFORM --dev $DEV --reset-cache --bundle-output $BASIC_BUNDLE_FILE --assets-dest $DEST"
   
   "$NODE_BINARY" $NODE_ARGS "$CLI_PATH" $BUNDLE_COMMAND \
     $BASIC_CONFIG_ARG \
     --entry-file "$BASIC_ENTRY" \
-    --platform "ios" \
-    --dev false \
+    --platform $BUNDLE_PLATFORM \
+    --dev $DEV \
     --reset-cache \
     --bundle-output "$BASIC_BUNDLE_FILE" \
     --assets-dest "$DEST" \
@@ -178,13 +219,13 @@ if [[ "$CONFIGURATION" = *Release* ]]; then
   echo "🔄 构建主包 (main)..."
   MAIN_BUNDLE_FILE="$CONFIGURATION_BUILD_DIR/main.jsbundle"
   
-  echo "   命令: $NODE_BINARY $NODE_ARGS $CLI_PATH $BUNDLE_COMMAND $CONFIG_ARG --entry-file $BUSINESS_ENTRY --platform ios --dev false --reset-cache --bundle-output $MAIN_BUNDLE_FILE --assets-dest $DEST"
+  echo "   命令: $NODE_BINARY $NODE_ARGS $CLI_PATH $BUNDLE_COMMAND $CONFIG_ARG --entry-file $BUSINESS_ENTRY --platform $BUNDLE_PLATFORM --dev $DEV --reset-cache --bundle-output $MAIN_BUNDLE_FILE --assets-dest $DEST"
   
   "$NODE_BINARY" $NODE_ARGS "$CLI_PATH" $BUNDLE_COMMAND \
     $CONFIG_ARG \
     --entry-file "$BUSINESS_ENTRY" \
-    --platform "ios" \
-    --dev false \
+    --platform $BUNDLE_PLATFORM \
+    --dev $DEV \
     --reset-cache \
     --bundle-output "$MAIN_BUNDLE_FILE" \
     --assets-dest "$DEST" \
@@ -237,19 +278,6 @@ else
   
   EXTRA_ARGS=()
   
-  case "$PLATFORM_NAME" in
-    "macosx")
-      BUNDLE_PLATFORM="macos"
-      ;;
-    *)
-      BUNDLE_PLATFORM="ios"
-      ;;
-  esac
-  
-  if [ "${IS_MACCATALYST}" = "YES" ]; then
-    BUNDLE_PLATFORM="ios"
-  fi
-  
   EMIT_SOURCEMAP=
   if [[ ! -z "$SOURCEMAP_FILE" ]]; then
     EMIT_SOURCEMAP=true
@@ -270,13 +298,16 @@ else
     EXTRA_ARGS+=("--minify" "false")
   fi
   
-  # Allow opting out of using npx react-native config
+  # 修复配置命令问题 - 避免使用 npx react-native config
+  # 直接使用项目根目录的配置，避免环境变量问题
   if [[ -n "$CONFIG_JSON" ]]; then
     EXTRA_ARGS+=("--load-config" "$CONFIG_JSON")
   elif [[ -n "$CONFIG_CMD" ]]; then
     EXTRA_ARGS+=("--config-cmd" "$CONFIG_CMD")
   else
-    EXTRA_ARGS+=("--config-cmd" "'$NODE_BINARY' $NODE_ARGS '$REACT_NATIVE_DIR/cli.js' config")
+    # 使用更安全的配置方式，避免依赖外部命令
+    echo "🔧 使用默认配置，跳过config命令..."
+    # 不添加 --config-cmd 参数，让bundle.js使用默认配置
   fi
   
   echo " Debug模式构建命令: $NODE_BINARY $NODE_ARGS $CLI_PATH $BUNDLE_COMMAND $CONFIG_ARG --entry-file $ENTRY_FILE --platform $BUNDLE_PLATFORM --dev $DEV --reset-cache --bundle-output $BUNDLE_FILE --assets-dest $DEST"
@@ -293,8 +324,6 @@ else
     "${EXTRA_ARGS[@]}" \
     $EXTRA_PACKAGER_ARGS
 fi
-
-echo "----------------------------------------BUNDLE_FILE: $BUNDLE_FILE"
 
 # Hermes处理（支持多bundle）
 if [[ $USE_HERMES == false ]]; then
