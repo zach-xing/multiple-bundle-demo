@@ -3,7 +3,7 @@ const bundleInfo = require('./config/bundleInfo.json');
 
 function createModuleIdFactory() {
   const fileToIdMap = new Map();
-  let nextId = 10000000;
+  let nextId = 10000000; // 只是随便写了一个数字，这里需要根据实际项目改的
   let isFirst = false;
 
   return (path) => {
