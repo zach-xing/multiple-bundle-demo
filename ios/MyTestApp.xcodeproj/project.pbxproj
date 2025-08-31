@@ -12,6 +12,11 @@
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		B7A83C9741A1446EA2EAFB8B /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		ECF14EA32E63ECE300D522B4 /* BundleLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF14EA22E63ECE300D522B4 /* BundleLoader.swift */; };
+		ECF14EA52E63ED0200D522B4 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF14EA42E63ED0200D522B4 /* LaunchViewController.swift */; };
+		ECF14EA72E644B9100D522B4 /* NotificationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF14EA62E644B9100D522B4 /* NotificationExtension.swift */; };
+		ECF14EAA2E644BD700D522B4 /* RNViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF14EA92E644BD700D522B4 /* RNViewController.swift */; };
+		ECF14EAC2E6450B300D522B4 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF14EAB2E6450B300D522B4 /* HomeViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +29,11 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-MyTestApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MyTestApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = MyTestApp/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MyTestApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		ECF14EA22E63ECE300D522B4 /* BundleLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BundleLoader.swift; path = MyTestApp/BundleLoader.swift; sourceTree = "<group>"; };
+		ECF14EA42E63ED0200D522B4 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LaunchViewController.swift; path = MyTestApp/LaunchViewController.swift; sourceTree = "<group>"; };
+		ECF14EA62E644B9100D522B4 /* NotificationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NotificationExtension.swift; path = MyTestApp/NotificationExtension.swift; sourceTree = "<group>"; };
+		ECF14EA92E644BD700D522B4 /* RNViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNViewController.swift; sourceTree = "<group>"; };
+		ECF14EAB2E6450B300D522B4 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HomeViewController.swift; path = MyTestApp/HomeViewController.swift; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -42,11 +52,16 @@
 		13B07FAE1A68108700A75B9A /* MyTestApp */ = {
 			isa = PBXGroup;
 			children = (
+				ECF14EA82E644BBB00D522B4 /* ReactNative */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				761780EC2CA45674006654EE /* AppDelegate.swift */,
+				ECF14EA62E644B9100D522B4 /* NotificationExtension.swift */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
+				ECF14EA22E63ECE300D522B4 /* BundleLoader.swift */,
+				ECF14EA42E63ED0200D522B4 /* LaunchViewController.swift */,
+				ECF14EAB2E6450B300D522B4 /* HomeViewController.swift */,
 			);
 			name = MyTestApp;
 			sourceTree = "<group>";
@@ -96,6 +111,14 @@
 				5709B34CF0A7D63546082F79 /* Pods-MyTestApp.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		ECF14EA82E644BBB00D522B4 /* ReactNative */ = {
+			isa = PBXGroup;
+			children = (
+				ECF14EA92E644BD700D522B4 /* RNViewController.swift */,
+			);
+			path = ReactNative;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -181,7 +204,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
+			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\nCUSTOM_SCRIPT=\"$SRCROOT/scripts/react-native-xcode-multi-bundle.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $CUSTOM_SCRIPT\"\n";
 		};
 		00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -246,7 +269,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ECF14EA32E63ECE300D522B4 /* BundleLoader.swift in Sources */,
+				ECF14EA52E63ED0200D522B4 /* LaunchViewController.swift in Sources */,
+				ECF14EA72E644B9100D522B4 /* NotificationExtension.swift in Sources */,
+				ECF14EAA2E644BD700D522B4 /* RNViewController.swift in Sources */,
 				761780ED2CA45674006654EE /* AppDelegate.swift in Sources */,
+				ECF14EAC2E6450B300D522B4 /* HomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,6 +288,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TFKGFUUS48;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = MyTestApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
@@ -273,7 +302,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.xzk.example.--PRODUCT-NAME-rfc1034identifier-";
 				PRODUCT_NAME = MyTestApp;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -288,6 +317,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TFKGFUUS48;
 				INFOPLIST_FILE = MyTestApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -300,7 +330,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.xzk.example.--PRODUCT-NAME-rfc1034identifier-";
 				PRODUCT_NAME = MyTestApp;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
