@@ -37,6 +37,9 @@ function AppContent() {
       >
         {customAdd(1, 2)}
       </Text >
+      <Text>
+        sfsdfsdfsfdsfsfsdfsdfsdfsd
+      </Text>
     </View>
   );
 }
