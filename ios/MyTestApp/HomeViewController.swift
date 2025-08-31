@@ -48,7 +48,7 @@ class HomeViewController: UIViewController {
   
   private lazy var loadRNButton: UIButton = {
     let button = UIButton(type: .system)
-    button.setTitle("�� 加载React Native页面", for: .normal)
+    button.setTitle("加载React Native页面", for: .normal)
     button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
     button.backgroundColor = .systemBlue
     button.setTitleColor(.white, for: .normal)
@@ -252,17 +252,10 @@ class HomeViewController: UIViewController {
     loadRNButton.setTitle("⏳ 正在加载...", for: .normal)
     loadRNButton.isEnabled = false
     loadRNButton.backgroundColor = .systemGray
-    
-    // 添加旋转动画
-    let rotation = CABasicAnimation(keyPath: "transform.rotation.z")
-    rotation.toValue = NSNumber(value: Double.pi * 2)
-    rotation.duration = 1
-    rotation.repeatCount = Float.infinity
-    loadRNButton.layer.add(rotation, forKey: "rotationAnimation")
   }
   
   private func hideLoadingIndicator() {
-    loadRNButton.setTitle("�� 加载React Native页面", for: .normal)
+    loadRNButton.setTitle("加载React Native页面", for: .normal)
     loadRNButton.isEnabled = true
     loadRNButton.backgroundColor = .systemBlue
     
