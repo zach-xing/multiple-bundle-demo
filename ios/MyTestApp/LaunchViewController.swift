@@ -102,11 +102,11 @@ class LaunchViewController: UIViewController {
     simulateLoadingProgress()
     
     // 开始加载bundle
-    BundleLoader.shared.preloadAllBundles { [weak self] success in
-      DispatchQueue.main.async {
-        self?.handleBundleLoadingComplete(success: success)
-      }
-    }
+//    BundleLoader.shared.preloadAllBundles { [weak self] success in
+//      DispatchQueue.main.async {
+//        self?.handleBundleLoadingComplete(success: success)
+//      }
+//    }
   }
   
   private func simulateLoadingProgress() {
